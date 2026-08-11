@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DUVAJ - Авторская онлайн-школа саксофона Руслана Браунгоф</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F1ECDC;
+    --paper:#F7F3E7;
+    --ink:#15130E;
+    --orange:#FF5A1F;
+    --blue:#1E3FE5;
+    --teal:#22766A;
+    --gold:#F5B400;
+    --shadow: 6px 6px 0 var(--ink);
+    --shadow-lg: 10px 10px 0 var(--ink);
+    --radius: 0px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Space Grotesk', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.display{
+    font-family:'Archivo Black', sans-serif;
+    text-transform:uppercase;
+    line-height:0.95;
+    letter-spacing:-0.01em;
+  }
+  .mono{
+    font-family:'JetBrains Mono', monospace;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+  }
+  a{color:inherit; text-decoration:none;}
+  img,svg{display:block; max-width:100%;}
+  .wrap{max-width:1200px; margin:0 auto; padding:0 28px;}
+  .grid-bg{
+    background-image:
+      linear-gradient(var(--ink) 1px, transparent 1px),
+      linear-gradient(90deg, var(--ink) 1px, transparent 1px);
+    background-size: 34px 34px;
+    background-position: -1px -1px;
+    background-color: var(--paper);
+    background-blend-mode: normal;
+    position:relative;
+  }
+  .grid-bg::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image:
+      linear-gradient(rgba(21,19,14,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(21,19,14,0.06) 1px, transparent 1px);
+    background-size:34px 34px;
+    pointer-events:none;
+  }
+
+  /* ---------- Buttons ---------- */
+  .btn{
+    display:inline-flex; align-items:center; gap:10px;
+    font-family:'JetBrains Mono', monospace;
+    font-weight:700; text-transform:uppercase; letter-spacing:0.06em;
+    font-size:14px;
+    padding:15px 24px;
+    border:3px solid var(--ink);
+    background:var(--ink); color:var(--cream);
+    box-shadow: var(--shadow);
+    cursor:pointer;
+    transition: transform .15s ease, box-shadow .15s ease;
+    white-space:nowrap;
+  }
+  .btn:hover{ transform:translate(-3px,-3px); box-shadow:9px 9px 0 var(--ink); }
+  .btn:active{ transform:translate(0,0); box-shadow:2px 2px 0 var(--ink); }
+  .btn.btn-orange{ background:var(--orange); color:var(--ink); }
+  .btn.btn-outline{ background:transparent; color:var(--ink); }
+
+  /* ---------- Header ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:var(--cream);
+    border-bottom:4px solid var(--ink);
+  }
+  .header-inner{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 28px;
+    max-width:1200px; margin:0 auto;
+  }
+  .logo{
+    display:flex; align-items:center; gap:10px;
+    font-family:'Archivo Black', sans-serif;
+    font-size:22px; text-transform:uppercase;
+  }
+  .logo .mark{
+    width:38px; height:38px;
+    background:var(--orange);
+    border:3px solid var(--ink);
+    display:flex; align-items:center; justify-content:center;
+    transform:rotate(-6deg);
+  }
+  nav{ display:flex; align-items:center; gap:24px; }
+  nav a.navlink{
+    font-family:'JetBrains Mono', monospace;
+    font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em;
+    border-bottom:2px solid transparent;
+    padding-bottom:2px;
+  }
+  nav a.navlink:hover{ border-bottom-color:var(--orange); }
+
+  /* ---------- Lang Switcher ---------- */
+  .lang-switch{
+    display:flex; align-items:center; gap:4px;
+    border:2px solid var(--ink); background:var(--paper);
+    padding:3px; font-family:'JetBrains Mono', monospace; font-size:11px; font-weight:700;
+  }
+  .lang-btn{
+    padding:4px 8px; border:none; background:transparent; cursor:pointer;
+    font-family:inherit; font-size:inherit; font-weight:inherit;
+    transition:background .15s;
+  }
+  .lang-btn.active{ background:var(--ink); color:var(--cream); }
+
+  .burger{ display:none; flex-direction:column; gap:5px; cursor:pointer; background:none; border:none; }
+  .burger span{ width:26px; height:3px; background:var(--ink); display:block; }
+
+  /* ---------- Marquee ---------- */
+  .marquee{
+    background:var(--ink); color:var(--cream);
+    border-bottom:4px solid var(--ink);
+    overflow:hidden; white-space:nowrap;
+    padding:10px 0;
+  }
+  .marquee-track{
+    display:inline-block;
+    animation: scroll-left 26s linear infinite;
+    font-family:'JetBrains Mono', monospace;
+    font-weight:700; letter-spacing:0.08em; font-size:14px;
+  }
+  .marquee-track span{ margin:0 22px; color:var(--gold); }
+  @keyframes scroll-left{ from{ transform:translateX(0);} to{ transform:translateX(-50%);} }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    background:var(--orange);
+    border-bottom:4px solid var(--ink);
+    position:relative;
+    overflow:hidden;
+  }
+  .hero-inner{
+    max-width:1200px; margin:0 auto; padding:70px 28px 60px;
+    display:grid; grid-template-columns: 1.15fr 0.85fr; gap:40px; align-items:center;
+  }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'JetBrains Mono', monospace; font-size:12px; font-weight:700;
+    letter-spacing:0.1em; text-transform:uppercase;
+    background:var(--ink); color:var(--cream);
+    padding:6px 12px; margin-bottom:20px;
+  }
+  .eyebrow::before{ content:"●"; color:var(--orange); }
+  .hero h1{ font-size:clamp(36px, 5vw, 62px); color:var(--ink); }
+  .hero h1 .line2{ display:block; -webkit-text-stroke:2px var(--ink); color:var(--orange); }
+  .hero p.lead{
+    margin-top:22px; max-width:480px;
+    font-size:17px; line-height:1.5; font-weight:500;
+  }
+  .hero-cta{ display:flex; gap:16px; margin-top:32px; flex-wrap:wrap; }
+
+  .hero-art{ position:relative; height:420px; }
+  .art-card{
+    position:absolute;
+    border:4px solid var(--ink);
+    background:var(--cream);
+    box-shadow: var(--shadow-lg);
+  }
+  .art-card.blue{ background:var(--blue); width:230px; height:230px; top:10px; left:30px; transform:rotate(-8deg); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+  .art-card.teal{ background:var(--teal); width:250px; height:250px; bottom:0; right:0; transform:rotate(6deg); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+  .hero-sax{ width:auto; height:auto; max-width:none; max-height:none; object-fit:contain; }
+  .hero-sax.alto{ width:190px; transform:rotate(-18deg) translate(2px, 12px); }
+  .hero-sax.soprano{ height:165px; transform:rotate(24deg) translate(6px, -4px); }
+  .stamp{
+    position:absolute; top:-10px; right:-6px;
+    width:132px; height:132px; border-radius:50%;
+    border:3px dashed var(--ink);
+    background:var(--gold);
+    display:flex; align-items:center; justify-content:center;
+    transform:rotate(8deg);
+    box-shadow: 5px 5px 0 var(--ink);
+  }
+  .stamp-inner{
+    width:104px; height:104px; border-radius:50%;
+    border:2px solid var(--ink);
+    display:flex; align-items:center; justify-content:center; text-align:center;
+    font-family:'JetBrains Mono', monospace; font-weight:700; font-size:10px;
+    letter-spacing:0.03em; line-height:1.35; padding:6px;
+  }
+
+  /* ---------- Stats ---------- */
+  .stats{ background:var(--ink); color:var(--cream); border-bottom:4px solid var(--ink); }
+  .stats-inner{
+    max-width:1200px; margin:0 auto; padding:0 28px;
+    display:grid; grid-template-columns:repeat(4,1fr);
+  }
+  .stat{ padding:34px 20px; border-left:2px solid rgba(241,236,220,0.25); }
+  .stat:first-child{ border-left:none; }
+  .stat .num{ font-family:'Archivo Black'; font-size:38px; color:var(--gold); }
+  .stat .lbl{ font-family:'JetBrains Mono'; font-size:11.5px; letter-spacing:0.06em; text-transform:uppercase; margin-top:6px; opacity:0.85; }
+
+  /* ---------- Section generic ---------- */
+  section{ padding:88px 0; border-bottom:4px solid var(--ink); }
+  .sec-head{ display:flex; justify-content:space-between; align-items:flex-end; gap:24px; margin-bottom:48px; flex-wrap:wrap; }
+  .sec-tag{ font-family:'JetBrains Mono'; font-size:12px; font-weight:700; letter-spacing:0.1em; color:var(--teal); margin-bottom:10px; display:block; }
+  .sec-head h2{ font-size:clamp(30px,4vw,44px); }
+  .sec-head p{ max-width:360px; font-size:15px; font-weight:500; opacity:0.8; }
+
+  /* ---------- About ---------- */
+  .about{ background:var(--paper); }
+  .about-grid{ display:grid; grid-template-columns: 0.9fr 1.1fr; gap:60px; align-items:center; }
+  .about-portrait{
+    width:100%; aspect-ratio:1/1; max-width:400px;
+    border-radius:50%; background:var(--teal);
+    border:4px solid var(--ink);
+    display:flex; align-items:center; justify-content:center;
+    margin:0 auto;
+  }
+  .about-portrait img{ width:78%; height:78%; object-fit:contain; }
+  .about-list{ margin-top:26px; display:grid; gap:16px; }
+  .about-item{ display:flex; gap:14px; align-items:flex-start; }
+  .about-item .chk{
+    flex:0 0 auto; width:26px; height:26px; background:var(--orange);
+    border:2px solid var(--ink); display:flex; align-items:center; justify-content:center;
+    font-family:'JetBrains Mono'; font-weight:700; font-size:13px;
+  }
+  .about-item p{ font-size:15.5px; font-weight:500; line-height:1.5; }
+
+  /* ---------- Programs ---------- */
+  .programs-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+  .prog-card{
+    background:var(--ink); color:var(--cream);
+    border:4px solid var(--ink); box-shadow:var(--shadow);
+    padding:0; overflow:hidden;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .prog-card:hover{ transform:translate(-4px,-4px); box-shadow:12px 12px 0 var(--ink); }
+  .prog-top{ height:120px; display:flex; align-items:center; justify-content:center; border-bottom:4px solid var(--ink); }
+  .prog-card.c1 .prog-top{ background:var(--orange); }
+  .prog-card.c2 .prog-top{ background:var(--gold); }
+  .prog-card.c3 .prog-top{ background:var(--blue); }
+  .prog-body{ padding:26px 24px 28px; }
+  .prog-body h3{ font-size:22px; margin-bottom:10px; }
+  .prog-body p{ font-size:14px; opacity:0.8; line-height:1.5; margin-bottom:18px; }
+  .prog-link{ font-family:'JetBrains Mono'; font-size:12.5px; font-weight:700; letter-spacing:0.05em; padding:10px 16px; background:var(--cream); color:var(--ink); display:inline-block; border:2px solid var(--cream); }
+
+  /* ---------- Instruments catalog ---------- */
+  .instruments{ background:var(--paper); }
+  .inst-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:24px; }
+  .inst-card{
+    background:var(--cream); border:3px solid var(--ink);
+    box-shadow:var(--shadow); padding:24px;
+    transition:transform .15s ease;
+  }
+  .inst-card:hover{ transform:translateY(-5px); }
+  .inst-icon{ width:100%; height:140px; display:flex; align-items:center; justify-content:center; margin-bottom:16px; }
+  .inst-icon img{ max-width:100%; max-height:100%; width:auto; height:auto; object-fit:contain; }
+  .inst-card h3{ font-size:18px; margin-bottom:6px; }
+  .inst-card .type{ font-family:'JetBrains Mono'; font-size:11px; font-weight:700; color:var(--teal); letter-spacing:0.05em; margin-bottom:10px; display:block; }
+  .inst-card p{ font-size:13.5px; opacity:0.75; line-height:1.5; }
+
+  /* ---------- Teacher / Author ---------- */
+  .teacher-single{
+    background:var(--paper);
+    border:4px solid var(--ink);
+    box-shadow:var(--shadow-lg);
+    display:grid;
+    grid-template-columns: 320px 1fr;
+  }
+  .teacher-single-photo{
+    background:var(--blue);
+    border-right:4px solid var(--ink);
+    display:flex; align-items:center; justify-content:center;
+    padding:0;
+    overflow:hidden;
+  }
+  .teacher-single-photo img{ width:100%; height:100%; object-fit:cover; }
+  .teacher-single-info{ padding:40px; }
+  .teacher-single-info h3{ font-size:32px; margin-bottom:8px; }
+  .teacher-single-info .role{ font-family:'JetBrains Mono'; font-size:13px; color:var(--orange); font-weight:700; letter-spacing:0.05em; text-transform:uppercase; margin-bottom:20px; display:block; }
+  .teacher-single-info p{ font-size:15px; line-height:1.6; opacity:0.85; margin-bottom:16px; }
+  .teacher-single-info .btn{ margin-top:10px; }
+
+  /* ---------- Testimonials ---------- */
+  .testi{ background:var(--ink); color:var(--cream); }
+  .testi .sec-tag{ color:var(--gold); }
+  .testi-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+  .testi-card{ background:#211E17; border:3px solid var(--gold); padding:26px 24px; }
+  .testi-stars{ color:var(--gold); font-size:15px; letter-spacing:3px; margin-bottom:14px; }
+  .testi-card p.quote{ font-size:14.5px; line-height:1.6; opacity:0.9; margin-bottom:18px; }
+  .testi-who{ display:flex; align-items:center; gap:12px; }
+  .testi-avatar{ width:40px; height:40px; border-radius:50%; border:2px solid var(--gold); background:var(--orange); }
+  .testi-who .name{ font-family:'JetBrains Mono'; font-size:12.5px; font-weight:700; }
+  .testi-who .sub{ font-size:11px; opacity:0.6; }
+
+  /* ---------- Pricing ---------- */
+  .price-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:24px; align-items:stretch; }
+  .price-card{ border:3px solid var(--ink); background:var(--cream); box-shadow:var(--shadow); padding:30px 26px; display:flex; flex-direction:column; }
+  .price-card.featured{ background:var(--orange); transform:translateY(-10px); box-shadow:var(--shadow-lg); }
+  .price-name{ font-family:'JetBrains Mono'; font-weight:700; font-size:13px; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:14px; }
+  .price-amount{ font-family:'Archivo Black'; font-size:42px; margin-bottom:4px; }
+  .price-amount span{ font-family:'JetBrains Mono'; font-size:16px; font-weight:700; }
+  .price-desc{ font-size:13px; opacity:0.8; margin-bottom:22px; font-weight:500; }
+  .price-feats{ list-style:none; display:grid; gap:10px; margin-bottom:26px; flex:1; }
+  .price-feats li{ font-size:13.5px; font-weight:500; padding-left:20px; position:relative; }
+  .price-feats li::before{ content:"—"; position:absolute; left:0; }
+  .price-note{
+    margin-top:28px;
+    padding:16px 20px;
+    background:var(--paper);
+    border:2px dashed var(--ink);
+    font-family:'JetBrains Mono';
+    font-size:12.5px;
+    text-align:center;
+  }
+
+  /* ---------- Contact / Footer ---------- */
+  .contact{ background:var(--blue); color:var(--cream); border-bottom:4px solid var(--ink); }
+  .contact-grid{ display:grid; grid-template-columns:1.2fr 0.8fr; gap:50px; }
+  .contact h2{ font-size:clamp(32px,4.4vw,52px); margin-bottom:20px; }
+  .contact p.lead{ font-size:16px; max-width:440px; opacity:0.9; margin-bottom:30px; }
+  .contact-box{ background:var(--ink); border:3px solid var(--cream); padding:30px; }
+  .contact-row{ display:flex; gap:14px; padding:14px 0; border-bottom:1px solid rgba(241,236,220,0.2); }
+  .contact-row:last-child{ border-bottom:none; }
+  .contact-row .k{ font-family:'JetBrains Mono'; font-size:11px; font-weight:700; letter-spacing:0.06em; opacity:0.55; width:90px; flex:none; }
+  .contact-row .v{ font-size:14.5px; font-weight:500; }
+  .soc-row{ display:flex; gap:10px; margin-top:20px; }
+  .soc-badge{ width:42px; height:42px; border:2px solid var(--cream); display:flex; align-items:center; justify-content:center; font-family:'JetBrains Mono'; font-weight:700; font-size:11px; transition:background .15s; }
+  .soc-badge:hover{ background:var(--orange); border-color:var(--orange); color:var(--ink); }
+
+  footer{ background:var(--cream); padding:26px 0; }
+  .footer-inner{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; font-family:'JetBrains Mono'; font-size:12px; opacity:0.7; }
+
+  .reveal{ opacity:0; transform:translateY(24px); transition:opacity .6s ease, transform .6s ease; }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 900px){
+    nav{ display:none; }
+    .burger{ display:flex; }
+    .hero-inner{ grid-template-columns:1fr; }
+    .hero-art{ height:300px; margin-top:20px; }
+    .stats-inner{ grid-template-columns:repeat(2,1fr); }
+    .stat:nth-child(3){ border-left:none; }
+    .about-grid, .contact-grid, .teacher-single{ grid-template-columns:1fr; }
+    .teacher-single-photo{ border-right:none; border-bottom:4px solid var(--ink); }
+    .programs-grid, .inst-grid, .testi-grid, .price-grid{ grid-template-columns:1fr; }
+    .price-card.featured{ transform:none; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .marquee-track{ animation:none; }
+    .reveal{ opacity:1; transform:none; transition:none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<header>
+  <div class="header-inner">
+    <a href="#top" class="logo"><span class="mark">♪</span>DUVAJ</a>
+    <nav>
+      <a class="navlink" href="#about" data-i18n="nav_about">О школе</a>
+      <a class="navlink" href="#programs" data-i18n="nav_programs">Программы</a>
+      <a class="navlink" href="#instruments" data-i18n="nav_sax">Саксофоны</a>
+      <a class="navlink" href="#teacher" data-i18n="nav_teacher">Педагог</a>
+      <a class="navlink" href="#prices" data-i18n="nav_prices">Цены</a>
+      <a class="navlink" href="#contact" data-i18n="nav_contact">Контакты</a>
+    </nav>
+    <div style="display:flex; align-items:center; gap:16px;">
+      <div class="lang-switch">
+        <button class="lang-btn active" onclick="setLang('ru')">RU</button>
+        <button class="lang-btn" onclick="setLang('en')">EN</button>
+        <button class="lang-btn" onclick="setLang('sr')">SR</button>
+      </div>
+      <a href="#contact" class="btn btn-orange" style="padding:12px 20px;" data-i18n="btn_start">Начать</a>
+      <button class="burger" id="burgerBtn" aria-label="Меню"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="marquee">
+  <div class="marquee-track">
+    <span>САКСОФОН ONLINE</span>·<span>АЛЬТ</span>·<span>ТЕНОР</span>·<span>СОПРАНО</span>·<span>ОНЛАЈН ШИРОМ СВЕТА</span>·<span>БАРИТОН</span>·<span>ОНЛАЙН ПО ВСЕМУ МИРУ</span>·<span>ONLINE WORLDWIDE</span>·
+    <span>САКСОФОН ONLINE</span>·<span>АЛЬТ</span>·<span>ТЕНОР</span>·<span>СОПРАНО</span>·<span>БАРИТОН</span>·<span>ОНЛАЙН ПО ВСЕМУ МИРУ</span>·
+  </div>
+</div>
+
+<!-- ============ HERO ============ -->
+<section id="top" class="hero" style="border-bottom:4px solid var(--ink); padding:0;">
+  <div class="hero-inner">
+    <div>
+      <span class="eyebrow" data-i18n="hero_badge">· Сербия · Онлайн по всему миру ·</span>
+      <h1 data-i18n="hero_title">АВТОРСКАЯ<br>ОНЛАЙН-ШКОЛА<span class="line2">САКСОФОНА</span></h1>
+      <p class="lead" data-i18n="hero_lead">Индивидуальные уроки от Руслана Браунгоф. Ставим академическое дыхание, чистый амбушюр и беглую технику без лишней «воды».</p>
+      <div class="hero-cta">
+        <a href="#prices" class="btn" data-i18n="hero_btn1">Выбрать абонемент ↗</a>
+        <a href="#programs" class="btn btn-outline" data-i18n="hero_btn2">Программы</a>
+      </div>
+    </div>
+    <div class="hero-art">
+      <div class="art-card blue">
+        <img src="alto.png" alt="Альт-саксофон" class="hero-sax alto">
+      </div>
+      <div class="art-card teal">
+        <img src="soprano.png" alt="Сопрано-саксофон" class="hero-sax soprano">
+      </div>
+      <div class="stamp">
+        <div class="stamp-inner">DUVAJ ONLINE<br>АВТОРСКИЙ<br>КУРС</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stats-inner">
+    <div class="stat"><div class="num">100%</div><div class="lbl" data-i18n="st1">Онлайн-формат</div></div>
+    <div class="stat"><div class="num">4</div><div class="lbl" data-i18n="st2">Вида саксофонов</div></div>
+    <div class="stat"><div class="num">22</div><div class="lbl" data-i18n="st3">Года игры на саксофоне</div></div>
+    <div class="stat"><div class="num">10+</div><div class="lbl" data-i18n="st4">Лет педагогики</div></div>
+  </div>
+</div>
+
+<!-- ============ ABOUT ============ -->
+<section id="about" class="about grid-bg">
+  <div class="wrap about-grid">
+    <div class="reveal">
+      <div class="about-portrait">
+        <img src="player_sax.png" alt="Саксофонист">
+      </div>
+    </div>
+    <div class="reveal">
+      <span class="sec-tag" data-i18n="about_tag">// О ШКОЛЕ</span>
+      <h2 data-i18n="about_title">Классический подход —<br>быстрый результат</h2>
+      <div class="about-list">
+        <div class="about-item"><div class="chk">✓</div><p data-i18n="ab_p1"><strong>Прямой контакт с преподавателем.</strong> Занятия строго с Русланом Браунгоф без посредников и кураторов.</p></div>
+        <div class="about-item"><div class="chk">✓</div><p data-i18n="ab_p2"><strong>Академическая базовая школа.</strong> Постановка правильного опирания звука, дыхания и амбушюра.</p></div>
+        <div class="about-item"><div class="chk">✓</div><p data-i18n="ab_p3"><strong>Из любой точки мира.</strong> Полноценный онлайн-формат с точной обратной связью.</p></div>
+        <div class="about-item"><div class="chk">✓</div><p data-i18n="ab_p4"><strong>Фокус на одном инструменте.</strong> Глубокая специализация строго на семействе саксофонов.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROGRAMS ============ -->
+<section id="programs">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <span class="sec-tag" data-i18n="prog_tag">// ПРОГРАММЫ</span>
+        <h2 data-i18n="prog_title">Направления обучения</h2>
+      </div>
+      <p data-i18n="prog_sub">С нуля или для повышения мастерства — подберём план под ваши задачи.</p>
+    </div>
+    <div class="programs-grid">
+      <div class="prog-card c1 reveal">
+        <div class="prog-top">
+          <svg width="56" height="56" viewBox="0 0 56 56"><circle cx="28" cy="28" r="22" fill="none" stroke="#15130E" stroke-width="4"/><path d="M20 30 l6 6 l12 -14" stroke="#15130E" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="prog-body">
+          <h3 data-i18n="p1_t">С нуля</h3>
+          <p data-i18n="p1_d">Постановка аппарата, дыхания, нотная грамота и первые уверенные произведения.</p>
+          <a href="#prices" class="prog-link" data-i18n="btn_apply">Записаться →</a>
+        </div>
+      </div>
+      <div class="prog-card c2 reveal">
+        <div class="prog-top">
+          <svg width="56" height="56" viewBox="0 0 56 56"><path d="M10 40 L20 20 L30 34 L38 14 L46 40" stroke="#15130E" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="prog-body">
+          <h3 data-i18n="p2_t">Продвинутая техника</h3>
+          <p data-i18n="p2_d">Исправление зажимов, беглость пальцев, работа над штрихами и чистая интонация.</p>
+          <a href="#prices" class="prog-link" data-i18n="btn_apply">Записаться →</a>
+        </div>
+      </div>
+      <div class="prog-card c3 reveal">
+        <div class="prog-top">
+          <svg width="56" height="56" viewBox="0 0 56 56"><rect x="12" y="12" width="32" height="24" rx="2" fill="none" stroke="#15130E" stroke-width="4"/><path d="M18 44 h20 M28 36 v8" stroke="#15130E" stroke-width="4" stroke-linecap="round"/></svg>
+        </div>
+        <div class="prog-body">
+          <h3 data-i18n="p3_t">Концертная подготовка</h3>
+          <p data-i18n="p3_d">Разбор академического и эстрадного репертуара, подготовка к выступлениям.</p>
+          <a href="#prices" class="prog-link" data-i18n="btn_apply">Записаться →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ INSTRUMENTS ============ -->
+<section id="instruments" class="instruments grid-bg">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <span class="sec-tag" data-i18n="sax_tag">// САКСОФОНЫ</span>
+        <h2 data-i18n="sax_title">Семейство саксофонов</h2>
+      </div>
+      <p data-i18n="sax_sub">Обучаю игре на всех ключевых разновидностях инструмента.</p>
+    </div>
+    <div class="inst-grid">
+
+      <div class="inst-card reveal">
+        <div class="inst-icon">
+          <img src="alto.png" alt="Альт-саксофон">
+        </div>
+        <span class="type">Eb (Эс)</span>
+        <h3 data-i18n="s1_t">Альт-саксофон</h3>
+        <p data-i18n="s1_d">Самый популярный инструмент для старта. Идеален для детей и взрослых.</p>
+      </div>
+
+      <div class="inst-card reveal">
+        <div class="inst-icon">
+          <img src="tenor.png" alt="Тенор-саксофон">
+        </div>
+        <span class="type">Bb (Си-бемоль)</span>
+        <h3 data-i18n="s2_t">Тенор-саксофон</h3>
+        <p data-i18n="s2_d">Глубокий, бархатный тембр. Отличное решение для густого звучания.</p>
+      </div>
+
+      <div class="inst-card reveal">
+        <div class="inst-icon">
+          <img src="soprano.png" alt="Сопрано-саксофон">
+        </div>
+        <span class="type">Bb (Си-бемоль)</span>
+        <h3 data-i18n="s3_t">Сопрано-саксофон</h3>
+        <p data-i18n="s3_d">Прямой саксофон с ярким и певучим звуком. Требует точной интонации.</p>
+      </div>
+
+      <div class="inst-card reveal">
+        <div class="inst-icon">
+          <img src="bari.png" alt="Баритон-саксофон">
+        </div>
+        <span class="type">Eb (Эс)</span>
+        <h3 data-i18n="s4_t">Баритон-саксофон</h3>
+        <p data-i18n="s4_d">Мощный басовый голос семейства. Фундамент любого ансамбля.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ TEACHER ============ -->
+<section id="teacher">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <span class="sec-tag" data-i18n="t_tag">// ПЕДАГОГ</span>
+        <h2 data-i18n="t_title">Ваш преподаватель</h2>
+      </div>
+      <p data-i18n="t_sub">Единственный ведущий педагог школы DUVAJ</p>
+    </div>
+    <div class="teacher-single reveal">
+      <div class="teacher-single-photo">
+        <img src="Ruslan_Braungof.JPG" alt="Руслан Браунгоф">
+      </div>
+      <div class="teacher-single-info">
+        <h3>Руслан Браунгоф</h3>
+        <span class="role" data-i18n="t_role">Классический педагог · Саксофонист</span>
+        <p data-i18n="t_p1">Профессиональный классический педагог с высшим академическим музыкальным образованием. Более 10 лет преподавательской практики и 22 года постоянного исполнительского опыта.</p>
+        <p data-i18n="t_p2">Строит обучение на фундаментальной классической базе: правильное диафрагмальное дыхание, постановка амбушюра, свободные кисти и контроль звука. Работает со студентами по всему миру в формате регулярных онлайн-уроков.</p>
+        <a href="https://braungof.ru" target="_blank" rel="noopener noreferrer" class="btn btn-orange" data-i18n="t_site">Личный сайт ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRICING ============ -->
+<section id="prices" class="grid-bg">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <span class="sec-tag" data-i18n="pr_tag">// ЦЕНЫ</span>
+        <h2 data-i18n="pr_title">Стоимость занятий</h2>
+      </div>
+      <p data-i18n="pr_sub">Сразу полноценная индивидуальная работа без пробных форматов.</p>
+    </div>
+    <div class="price-grid">
+      <div class="price-card reveal">
+        <div class="price-name" data-i18n="pr1_name">Разовое занятие</div>
+        <div class="price-amount">45 <span>€</span></div>
+        <div class="price-desc" data-i18n="pr1_desc">Индивидуальный урок (60 мин)</div>
+        <ul class="price-feats">
+          <li data-i18n="pr1_f1">Диагностика аппарата</li>
+          <li data-i18n="pr1_f2">Разбор техники и произведений</li>
+          <li data-i18n="pr1_f3">Урок из любой точки мира</li>
+        </ul>
+        <a href="#contact" class="btn btn-outline" data-i18n="btn_apply">Записаться</a>
+      </div>
+      <div class="price-card featured reveal">
+        <div class="price-name" data-i18n="pr2_name">Абонемент · 8 занятий</div>
+        <div class="price-amount">300 <span>€</span></div>
+        <div class="price-desc" data-i18n="pr2_desc">37,5 € за урок · Популярный выбор</div>
+        <ul class="price-feats">
+          <li data-i18n="pr2_f1">Регулярный ритм обучения</li>
+          <li data-i18n="pr2_f2">Персональный план занятий</li>
+          <li data-i18n="pr2_f3">Обратная связь между уроками</li>
+          <li data-i18n="pr2_f4">Фиксация удобного графика</li>
+        </ul>
+        <a href="#contact" class="btn" data-i18n="btn_apply">Записаться</a>
+      </div>
+      <div class="price-card reveal">
+        <div class="price-name" data-i18n="pr3_name">Абонемент · 10 занятий</div>
+        <div class="price-amount">350 <span>€</span></div>
+        <div class="price-desc" data-i18n="pr3_desc">35 € за урок · Выгодный курс</div>
+        <ul class="price-feats">
+          <li data-i18n="pr3_f1">Максимально выгодная цена</li>
+          <li data-i18n="pr3_f2">Глубокая проработка репертуара</li>
+          <li data-i18n="pr3_f3">Подготовка к выступлениям</li>
+        </ul>
+        <a href="#contact" class="btn btn-outline" data-i18n="btn_apply">Записаться</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section id="contact" class="contact">
+  <div class="wrap contact-grid">
+    <div class="reveal">
+      <span class="sec-tag" style="color:var(--gold)" data-i18n="c_tag">// ЗАПИСЬ</span>
+      <h2 data-i18n="c_title">Записаться на уроки</h2>
+      <p class="lead" data-i18n="c_sub">Напишите мне в удобный мессенджер, чтобы согласовать график индивидуальных онлайн-занятий.</p>
+      <div class="hero-cta">
+        <a href="https://t.me/saxmus" target="_blank" rel="noopener noreferrer" class="btn btn-orange" data-i18n="c_btn">Написать в Telegram</a>
+      </div>
+    </div>
+    <div class="contact-box reveal">
+      <div class="contact-row"><div class="k" data-i18n="ck1">Формат</div><div class="v" data-i18n="cv1">Онлайн (по всему миру)</div></div>
+      <div class="contact-row"><div class="k" data-i18n="ck2">Базирование</div><div class="v" data-i18n="cv2">Сербия</div></div>
+      <div class="contact-row"><div class="k" data-i18n="ck3">Педагог</div><div class="v">Руслан Браунгоф</div></div>
+      <div class="soc-row">
+        <a href="https://t.me/saxmus" target="_blank" rel="noopener noreferrer" class="soc-badge">TG</a>
+        <a href="https://instagram.com/sax_mus" target="_blank" rel="noopener noreferrer" class="soc-badge">IG</a>
+        <a href="https://www.youtube.com/@Ruslan_Braungof" target="_blank" rel="noopener noreferrer" class="soc-badge">YT</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-inner">
+    <span data-i18n="footer_copy">© 2026 DUVAJ — АВТОРСКАЯ ОНЛАЙН-ШКОЛА САКСОФОНА РУСЛАНА БРАУНГОФ</span>
+    <span>СЕРБИЯ / SERBIA</span>
+  </div>
+</footer>
+
+<script>
+  // Translations Object
+  const i18n = {
+    ru: {
+      nav_about: "О школе", nav_programs: "Программы", nav_sax: "Саксофоны", nav_teacher: "Педагог", nav_prices: "Цены", nav_contact: "Контакты",
+      btn_start: "Начать", hero_badge: "· Сербия · Онлайн по всему миру ·",
+      hero_title: 'АВТОРСКАЯ<br>ОНЛАЙН-ШКОЛА<span class="line2">САКСОФОНА</span>',
+      hero_lead: "Индивидуальные уроки от Руслана Браунгоф. Ставим академическое дыхание, чистый амбушюр и беглую технику без лишней «воды».",
+      hero_btn1: "Выбрать абонемент ↗", hero_btn2: "Программы",
+      st1: "Онлайн-формат", st2: "Вида саксофонов", st3: "Года игры на саксофоне", st4: "Лет педагогики",
+      about_tag: "// О ШКОЛЕ", about_title: "Классический подход —<br>быстрый результат",
+      ab_p1: "<strong>Прямой контакт с преподавателем.</strong> Занятия строго с Русланом Браунгоф без посредников.",
+      ab_p2: "<strong>Академическая базовая школа.</strong> Постановка правильного опирания звука, дыхания и амбушюра.",
+      ab_p3: "<strong>Из любой точки мира.</strong> Полноценный онлайн-формат с точной обратной связью.",
+      ab_p4: "<strong>Фокус на одном инструменте.</strong> Глубокая специализация строго на семействе саксофонов.",
+      prog_tag: "// ПРОГРАММЫ", prog_title: "Направления обучения", prog_sub: "С нуля или для повышения мастерства — подберём план под ваши задачи.",
+      p1_t: "С нуля", p1_d: "Постановка аппарата, дыхания, нотная грамота и первые уверенные произведения.",
+      p2_t: "Продвинутая техника", p2_d: "Исправление зажимов, беглость пальцев, работа над штрихами и чистая интонация.",
+      p3_t: "Концертная подготовка", p3_d: "Разбор академического и эстрадного репертуара, подготовка к выступлениям.",
+      btn_apply: "Записаться →",
+      sax_tag: "// САКСОФОНЫ", sax_title: "Семейство саксофонов", sax_sub: "Обучаю игре на всех ключевых разновидностях инструмента.",
+      s1_t: "Альт-саксофон", s1_d: "Самый популярный инструмент для старта. Идеален для детей и взрослых.",
+      s2_t: "Тенор-саксофон", s2_d: "Глубокий, бархатный тембр. Отличное решение для густого звучания.",
+      s3_t: "Сопрано-саксофон", s3_d: "Прямой саксофон с ярким и певучим звуком. Требует точной интонации.",
+      s4_t: "Баритон-саксофон", s4_d: "Мощный басовый голос семейства. Фундамент любого ансамбля.",
+      t_tag: "// ПЕДАГОГ", t_title: "Ваш преподаватель", t_sub: "Единственный ведущий педагог школы DUVAJ",
+      t_role: "Классический педагог · Саксофонист",
+      t_p1: "Профессиональный классический педагог с высшим академическим музыкальным образованием. Более 10 лет преподавательской практики и 22 года постоянного исполнительского опыта.",
+      t_p2: "Строит обучение на фундаментальной классической базе: правильное диафрагмальное дыхание, постановка амбушюра, свободные кисти и контроль звука. Работает со студентами по всему миру в формате регулярных онлайн-уроков.",
+      t_site: "Личный сайт ↗",
+      pr_tag: "// ЦЕНЫ", pr_title: "Стоимость занятий", pr_sub: "Сразу полноценная индивидуальная работа без пробных форматов.",
+      pr1_name: "Разовое занятие", pr1_desc: "Индивидуальный урок (60 мин)", pr1_f1: "Диагностика аппарата", pr1_f2: "Разбор техники и произведений", pr1_f3: "Урок из любой точки мира",
+      pr2_name: "Абонемент · 8 занятий", pr2_desc: "37,5 € за урок · Популярный выбор", pr2_f1: "Регулярный ритм обучения", pr2_f2: "Персональный план занятий", pr2_f3: "Обратная связь между уроками", pr2_f4: "Фиксация удобного графика",
+      pr3_name: "Абонемент · 10 занятий", pr3_desc: "35 € за урок · Выгодный курс", pr3_f1: "Максимально выгодная цена", pr3_f2: "Глубокая проработка репертуара", pr3_f3: "Подготовка к выступлениям",
+      price_note: "📌 <strong>Информация об оплате:</strong> Оплата производится в евро (€) или в сербских динарах (RSD) по текущему эквивалентному курсу.",
+      c_tag: "// ЗАПИСЬ", c_title: "Записаться на уроки", c_sub: "Напишите мне в удобный мессенджер, чтобы согласовать график индивидуальных онлайн-занятий.",
+      c_btn: "Написать в Telegram", ck1: "Формат", cv1: "Онлайн (по всему миру)", ck2: "Базирование", cv2: "Сербия", ck3: "Педагог",
+      footer_copy: "© 2026 DUVAJ — АВТОРСКАЯ ОНЛАЙН-ШКОЛА САКСОФОНА РУСЛАНА БРАУНГОФ"
+    },
+    en: {
+      nav_about: "About", nav_programs: "Programs", nav_sax: "Saxophones", nav_teacher: "Teacher", nav_prices: "Pricing", nav_contact: "Contact",
+      btn_start: "Start", hero_badge: "· Serbia · Worldwide Online ·",
+      hero_title: 'AUTHOR\'S<br>ONLINE SAXOPHONE<span class="line2">SCHOOL</span>',
+      hero_lead: "1-on-1 private lessons by Ruslan Braungof. Master breath support, embouchure & technique with no fluff.",
+      hero_btn1: "Choose Pass ↗", hero_btn2: "Programs",
+      st1: "Online Format", st2: "Sax Types", st3: "Years Playing", st4: "Years Teaching",
+      about_tag: "// ABOUT", about_title: "Classical Approach —<br>Fast Results",
+      ab_p1: "<strong>Direct line to teacher.</strong> Lessons strictly with Ruslan Braungof without third parties.",
+      ab_p2: "<strong>Academic Foundation.</strong> Correct airflow, sound production, and jaw posture.",
+      ab_p3: "<strong>Learn Anywhere.</strong> Complete online format with detailed feedback.",
+      ab_p4: "<strong>Focused Mastery.</strong> Specialized solely on the saxophone family.",
+      prog_tag: "// PROGRAMS", prog_title: "Study Directions", prog_sub: "From scratch or skill refinement — custom plan tailored for you.",
+      p1_t: "Beginner", p1_d: "Air support, posture, music reading, and playing your first pieces.",
+      p2_t: "Advanced Tech", p2_d: "Fixing tensions, finger dexterity, articulation & intonation control.",
+      p3_t: "Concert Prep", p3_d: "Repertoire polish, classical & pop pieces, stage preparation.",
+      btn_apply: "Enroll →",
+      sax_tag: "// SAXOPHONES", sax_title: "Saxophone Family", sax_sub: "Teaching all main types of the instrument.",
+      s1_t: "Alto Saxophone", s1_d: "Most popular choice to start. Perfect for both kids and adults.",
+      s2_t: "Tenor Saxophone", s2_d: "Deep, warm sound. Ideal for a rich and full tone.",
+      s3_t: "Soprano Saxophone", s3_d: "Straight sax with a bright singing voice. Requires good pitch.",
+      s4_t: "Baritone Saxophone", s4_d: "Powerful bass voice of the family. The anchor of any ensemble.",
+      t_tag: "// TEACHER", t_title: "Your Instructor", t_sub: "Head teacher of DUVAJ school",
+      t_role: "Classical Teacher · Saxophonist",
+      t_p1: "Professional classical instructor with higher academic music education. 10+ years teaching experience and 22 years playing.",
+      t_p2: "Builds playing on classical grounds: diaphragmatic breath, embouchure, free wrists, sound control. Works with students worldwide.",
+      t_site: "Personal Site ↗",
+      pr_tag: "// PRICING", pr_title: "Lesson Rates", pr_sub: "Full private lessons right from day one.",
+      pr1_name: "Single Lesson", pr1_desc: "1-on-1 Lesson (60 min)", pr1_f1: "Technique checkup", pr1_f2: "Piece & exercise review", pr1_f3: "Worldwide online access",
+      pr2_name: "8-Lesson Pass", pr2_desc: "37.5 € / lesson · Most Popular", pr2_f1: "Consistent learning rhythm", pr2_f2: "Personalized roadmap", pr2_f3: "Homework support", pr2_f4: "Fixed lesson schedule",
+      pr3_name: "10-Lesson Pass", pr3_desc: "35 € / lesson · Best Value", pr3_f1: "Best price per lesson", pr3_f2: "Deep repertoire work", pr3_f3: "Performance preparation",
+      price_note: "📌 <strong>Payment info:</strong> Payment accepted in EUR (€) or RSD (Serbian Dinar) equivalent.",
+      c_tag: "// CONTACT", c_title: "Book a Lesson", c_sub: "Message me in Telegram to pick a convenient schedule for online lessons.",
+      c_btn: "Message on Telegram", ck1: "Format", cv1: "Online (Worldwide)", ck2: "Location", cv2: "Serbia", ck3: "Teacher",
+      footer_copy: "© 2026 DUVAJ — ONLINE SAXOPHONE SCHOOL BY RUSLAN BRAUNGOF"
+    },
+    sr: {
+      nav_about: "O školi", nav_programs: "Programi", nav_sax: "Saksofoni", nav_teacher: "Predavač", nav_prices: "Cene", nav_contact: "Kontakt",
+      btn_start: "Započni", hero_badge: "· Srbija · Online širom sveta ·",
+      hero_title: 'AUTORSKA<br>ONLINE ŠKOLA<span class="line2">SAKSOFONA</span>',
+      hero_lead: "Individualni časovi od Ruslana Braungof. Akademsko disanje, čist ambušur i tehnika bez gubljenja vremena.",
+      hero_btn1: "Izaberi paket ↗", hero_btn2: "Programi",
+      st1: "Online format", st2: "Vrste saksofona", st3: "Godina sviranja", st4: "Godina pedagogije",
+      about_tag: "// O ŠKOLI", about_title: "Klasičan pristup —<br>brz rezultat",
+      ab_p1: "<strong>Direktan kontakt.</strong> Časovi isključivo sa Ruslanom Braungof bez posrednika.",
+      ab_p2: "<strong>Akademska osnova.</strong> Pravilno disanje, postavka tona i ambušura.",
+      ab_p3: "<strong>Bilo gde u svetu.</strong> Potpuni online format sa preciznim povratnim informacijama.",
+      ab_p4: "<strong>Fokus na saksofon.</strong> Specijalizacija isključivo na porodici saksofona.",
+      prog_tag: "// PROGRAMI", prog_title: "Smerovi obuke", prog_sub: "Od nule ili za usavršavanje — pravimo plan prema vašim ciljevima.",
+      p1_t: "Od nule", p1_d: "Postavka aparata, disanje, note i prve kompozicije.",
+      p2_t: "Napredna tehnika", p2_d: "Otklanjanje grča, brzina prstiju, artikulacija i čista intonacija.",
+      p3_t: "Priprema za nastup", p3_d: "Rad na repertoaru, klasične i popularne kompozicije.",
+      btn_apply: "Prijavi se →",
+      sax_tag: "// SAKSOFONI", sax_title: "Porodica saksofona", sax_sub: "Časovi za sve glavne vrste instrumenata.",
+      s1_t: "Alt saksofon", s1_d: "Najpopularniji izbor za početak. Savršen za decu i odrasle.",
+      s2_t: "Tenor saksofon", s2_d: "Dubok i topao ton. Odličan izbor za bogat zvuk.",
+      s3_t: "Sopran saksofon", s3_d: "Ravan saksofon sa svetlim tonom. Zahteva preciznu intonaciju.",
+      s4_t: "Bariton saksofon", s4_d: "Moćan bas glas porodice saksofona. Temelj ansambla.",
+      t_tag: "// PREDAVAČ", t_title: "Vaš profesor", t_sub: "Glavni predavač škole DUVAJ",
+      t_role: "Klasični pedagog · Saksofonista",
+      t_p1: "Profesionalni klasični pedagog sa visokim muzičkim obrazovanjem. Više od 10 godina pedagoškog i 22 godine izvođačkog iskustva.",
+      t_p2: "Nastava na klasičnim osnovama: dijafragmalno disanje, ambušur, opuštene ruke i kontrola zvuka. Radi sa učenicima širom sveta.",
+      t_site: "Lični sajt ↗",
+      pr_tag: "// CENE", pr_title: "Cenovnik časova", pr_sub: "Potpuni individualni časovi od samog početka.",
+      pr1_name: "Pojedinačni čas", pr1_desc: "Individualni čas (60 min)", pr1_f1: "Dijagnostika aparata", pr1_f2: "Analiza tehnike i kompozicija", pr1_f3: "Čas sa bilo koje lokacije",
+      pr2_name: "Paket od 8 časova", pr2_desc: "37,5 € po času · Najpopularnije", pr2_f1: "Redovan ritam učenja", pr2_f2: "Personalizovani plan", pr2_f3: "Podrška između časova", pr2_f4: "Fiksni raspored",
+      pr3_name: "Paket od 10 časova", pr3_desc: "35 € po času · Najpovoljnije", pr3_f1: "Najpovoljnija cena", pr3_f2: "Detaljan rad na repertoaru", pr3_f3: "Priprema za nastupe",
+      price_note: "📌 <strong>Informacija o plaćanju:</strong> Plaćanje u evrima (€) ili u srpskim dinarima (RSD) po srednjem kursu.",
+      c_tag: "// KONTAKT", c_title: "Zakažite čas", c_sub: "Javite mi se na Telegram radi dogovora o rasporedu online časova.",
+      c_btn: "Pišite na Telegram", ck1: "Format", cv1: "Online (širom sveta)", ck2: "Lokacija", cv2: "Srbija", ck3: "Predavač",
+      footer_copy: "© 2026 DUVAJ — ONLINE ŠKOLA SAKSOFONA RUSLANA BRAUNGOF"
+    }
+  };
+
+  function setLang(lang) {
+    document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (i18n[lang] && i18n[lang][key]) {
+        el.innerHTML = i18n[lang][key];
+      }
+    });
+  }
+
+  // Mobile nav toggle
+  const burger = document.getElementById('burgerBtn');
+  const nav = document.querySelector('nav');
+  burger.addEventListener('click', () => {
+    const isOpen = nav.style.display === 'flex';
+    if(isOpen){
+      nav.style.display = 'none';
+    } else {
+      nav.style.display = 'flex';
+      nav.style.position = 'absolute';
+      nav.style.top = '100%';
+      nav.style.left = '0';
+      nav.style.right = '0';
+      nav.style.flexDirection = 'column';
+      nav.style.background = 'var(--cream)';
+      nav.style.borderBottom = '4px solid var(--ink)';
+      nav.style.padding = '20px 28px';
+      nav.style.gap = '18px';
+    }
+  });
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => io.observe(el));
+</script>
+</body>
+</html>
